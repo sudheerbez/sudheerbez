@@ -2,11 +2,10 @@
 
 ### About Me
 
-I'm a results-driven **Software Engineer** with over **5+ years** of experience crafting high-performance applications across financial trading, healthcare, and community service platforms. I hold a **Master of Science in Computer Science** from Wichita State University (CGPA: 3.97/4.0).
+I'm a results-driven **Software Engineer** with **5+ years** of experience crafting high-performance applications across financial trading, healthcare, and community service platforms. I hold a **Master of Science in Computer Science** from Wichita State University (CGPA: 3.97/4.0).
 
 - 🔭 I'm currently working as a **Software Engineer at Robinhood**, building cutting-edge automated investment solutions and real-time portfolio systems
 - 🌱 I'm passionate about **microservices architecture, event-driven systems, and cloud-native development**
-- 💡 I've published research in **IEEE** — *"Remote Medical Assistance for Marine Fishermen through OceanNet"* ([ICCCNT 2021](https://doi.org/10.1109/ICCCNT51525.2021.9579678))
 - 🤝 I led the development of a **community service platform** that achieved **20,000+ app downloads** and **150% increase in user retention**
 - 📫 How to reach me: **sudheerbez9@gmail.com** | [LinkedIn](https://linkedin.com/in/sudheerbez)
 
