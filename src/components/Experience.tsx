@@ -1,8 +1,34 @@
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { education, experience, stats } from "../data/content";
 
+gsap.registerPlugin(ScrollTrigger);
+
 export function Experience() {
+  const root = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const el = root.current;
+    if (!el) return;
+    const ctx = gsap.context(() => {
+      gsap.from(".job, .edu, .stat", {
+        y: 36,
+        opacity: 0,
+        duration: 0.9,
+        stagger: 0.08,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: el,
+          start: "top 70%",
+        },
+      });
+    }, el);
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section className="experience section" id="experience">
+    <section className="experience section" id="experience" ref={root}>
       <div className="exp-grid">
         <div className="exp-sticky">
           <p className="kicker">04 — Path</p>

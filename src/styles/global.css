@@ -95,7 +95,7 @@ img {
 }
 
 .grain {
-  opacity: 0.07;
+  opacity: 0.045;
   mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
@@ -116,19 +116,19 @@ img {
 }
 
 .cursor-dot {
-  width: 8px;
-  height: 8px;
-  margin: -4px 0 0 -4px;
+  width: 10px;
+  height: 10px;
+  margin: -5px 0 0 -5px;
   border-radius: 50%;
   background: var(--accent);
   position: absolute;
 }
 
 .cursor-ring {
-  width: 40px;
-  height: 40px;
-  margin: -20px 0 0 -20px;
-  border: 1px solid rgba(214, 255, 63, 0.7);
+  width: 52px;
+  height: 52px;
+  margin: -26px 0 0 -26px;
+  border: 1.5px solid rgba(214, 255, 63, 0.85);
   border-radius: 50%;
   position: absolute;
   transition: width 0.35s var(--ease), height 0.35s var(--ease), margin 0.35s var(--ease),
@@ -235,12 +235,12 @@ img {
   align-items: center;
   justify-content: space-between;
   padding: 1.1rem var(--pad);
-  mix-blend-mode: difference;
-  color: #fff;
+  color: var(--fg);
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.72rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
+  background: linear-gradient(to bottom, rgba(5, 5, 5, 0.72), transparent);
 }
 
 .nav-mark {
@@ -299,6 +299,23 @@ img {
   transform-origin: left;
 }
 
+.ghost-name {
+  position: fixed;
+  left: -4vw;
+  bottom: -8vh;
+  z-index: 1;
+  pointer-events: none;
+  font-family: var(--font-display);
+  font-size: 28vw;
+  line-height: 0.7;
+  letter-spacing: -0.06em;
+  text-transform: uppercase;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(239, 232, 220, 0.06);
+  white-space: nowrap;
+  mix-blend-mode: overlay;
+}
+
 .hud-index {
   position: fixed;
   right: var(--pad);
@@ -308,7 +325,6 @@ img {
   font-size: 0.68rem;
   letter-spacing: 0.18em;
   color: var(--fg-dim);
-  mix-blend-mode: difference;
 }
 
 /* ── layout ── */
@@ -389,7 +405,7 @@ main {
   text-transform: uppercase;
   line-height: 0.78;
   letter-spacing: -0.045em;
-  font-size: clamp(4.6rem, 18.5vw, 17rem);
+  font-size: clamp(3.2rem, 16.5vw, 17rem);
   overflow: hidden;
 }
 
@@ -487,7 +503,8 @@ main {
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
   overflow: hidden;
-  padding: 0.85rem 0;
+  padding: 0.95rem 0;
+  margin-top: 0.5rem;
   background: rgba(5, 5, 5, 0.35);
   backdrop-filter: blur(8px);
 }
@@ -521,8 +538,8 @@ main {
 
 /* ── manifesto ── */
 .manifesto {
-  min-height: 180vh;
-  padding-top: 18vh;
+  min-height: 100vh;
+  padding-top: 10vh;
 }
 
 .manifesto-pin {
@@ -615,16 +632,28 @@ main {
   padding-bottom: 2rem;
 }
 
+.work-cue em {
+  color: var(--accent);
+  font-style: normal;
+}
+
 .project {
   flex: 0 0 min(78vw, 920px);
   min-height: 64vh;
   border: 1px solid var(--line);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+  background-color: rgba(12, 12, 12, 0.72);
+  background-repeat: no-repeat;
   padding: clamp(1.4rem, 3vw, 2.4rem);
   display: grid;
   grid-template-rows: auto 1fr auto;
   position: relative;
   overflow: hidden;
+  transition: transform 0.5s var(--ease), border-color 0.5s var(--ease);
+}
+
+.project:hover {
+  transform: translateY(-8px);
+  border-color: rgba(214, 255, 63, 0.35);
 }
 
 .project::before {
@@ -719,6 +748,12 @@ main {
 
 .project-link i {
   color: var(--accent);
+  display: inline-block;
+  transition: transform 0.35s var(--ease);
+}
+
+.project:hover .project-link i {
+  transform: translate(3px, -3px);
 }
 
 /* ── experience ── */
@@ -1000,6 +1035,10 @@ main {
     display: none;
   }
 
+  .hero-title {
+    font-size: clamp(3.05rem, 15.2vw, 5.5rem);
+  }
+
   .hero-foot {
     grid-template-columns: 1fr;
     gap: 1.2rem;
@@ -1042,6 +1081,18 @@ main {
   .project {
     flex-basis: auto;
     min-height: auto;
+  }
+
+  .project:hover {
+    transform: none;
+  }
+
+  .work-cue {
+    display: none;
+  }
+
+  .ghost-name {
+    display: none;
   }
 
   .manifesto-bio {

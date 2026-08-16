@@ -3,6 +3,7 @@ import { Contact } from "./components/Contact";
 import { Craft } from "./components/Craft";
 import { Cursor } from "./components/Cursor";
 import { Experience } from "./components/Experience";
+import { GhostName } from "./components/GhostName";
 import { Hero } from "./components/Hero";
 import { Loader } from "./components/Loader";
 import { Manifesto } from "./components/Manifesto";
@@ -56,6 +57,7 @@ export default function App() {
           <Canvas3D />
         </Suspense>
       )}
+      <GhostName />
       <Nav />
       <Progress />
       <main>

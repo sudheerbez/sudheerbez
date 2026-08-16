@@ -49,13 +49,20 @@ export function Work() {
           <p className="kicker">03 — Selected work</p>
           <h2>The tape</h2>
         </div>
-        <p className="label">Scroll sideways through the systems</p>
+        <p className="label work-cue">
+          Drag the reel <em>→</em>
+        </p>
       </div>
 
       <div className="work-pin" ref={pin}>
         <div className="work-track" ref={track}>
           {projects.map((project) => (
-            <article className="project" key={project.index} data-cursor>
+            <article
+              className="project"
+              key={project.index}
+              data-cursor
+              style={{ backgroundImage: project.wash }}
+            >
               <div>
                 <div className="project-index">{project.index}</div>
                 <p className="kicker project-kicker">{project.kicker}</p>

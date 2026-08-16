@@ -58,7 +58,7 @@ function Core() {
   });
 
   return (
-    <group ref={group} position={[1.15, 0.15, 0]}>
+    <group ref={group} position={[1.85, 0.2, 0]}>
       <mesh>
         <icosahedronGeometry args={[1.28, 0]} />
         <meshStandardMaterial color="#ece6da" metalness={1} roughness={0.16} />
@@ -121,8 +121,8 @@ function Rig() {
   useFrame(({ camera }) => {
     const p = scrollState.progress;
     const target = vec.set(
-      pointerState.nx * 0.45 + 0.15,
-      0.25 + pointerState.ny * -0.25 + p * 0.85,
+      pointerState.nx * 1.15 + 0.35,
+      0.2 + pointerState.ny * -0.55 + p * 0.85,
       5.1 - p * 1.35,
     );
     camera.position.lerp(target, 0.06);

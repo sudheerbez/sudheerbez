@@ -12,20 +12,34 @@ export function Manifesto() {
     const el = root.current;
     if (!el) return;
     const words = el.querySelectorAll(".word");
+    const mm = gsap.matchMedia();
 
-    const ctx = gsap.context(() => {
+    const paint = (progress: number) => {
+      const n = Math.floor(progress * words.length + 0.01);
+      words.forEach((word, i) => word.classList.toggle("is-on", i <= n));
+    };
+
+    mm.add("(min-width: 901px)", () => {
       ScrollTrigger.create({
         trigger: el,
-        start: "top 70%",
-        end: "center 30%",
-        onUpdate: (self) => {
-          const n = Math.floor(self.progress * words.length + 0.01);
-          words.forEach((word, i) => word.classList.toggle("is-on", i <= n));
-        },
+        start: "top top",
+        end: "+=140%",
+        pin: true,
+        anticipatePin: 1,
+        onUpdate: (self) => paint(self.progress),
       });
-    }, el);
+    });
 
-    return () => ctx.revert();
+    mm.add("(max-width: 900px)", () => {
+      ScrollTrigger.create({
+        trigger: el,
+        start: "top 75%",
+        end: "bottom 40%",
+        onUpdate: (self) => paint(self.progress),
+      });
+    });
+
+    return () => mm.revert();
   }, []);
 
   const words = [...manifesto, "REAL-TIME.", "CLOUD-NATIVE.", "MARKET-SPEED."];

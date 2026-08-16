@@ -35,6 +35,7 @@ export const projects = [
     metric: "99.99% uptime · 35% faster APIs",
     tags: ["Java", "Spring Boot", "Kafka", "GraphQL", "React", "AWS"],
     href: "https://github.com/sudheerbez",
+    wash: "radial-gradient(circle at 80% 20%, rgba(214,255,63,0.22), transparent 42%)",
   },
   {
     index: "02",
@@ -45,6 +46,7 @@ export const projects = [
     metric: "30% fewer manual escalations",
     tags: ["Java", "Kafka", "HIPAA", "Kubernetes", "Terraform"],
     href: "https://github.com/sudheerbez",
+    wash: "radial-gradient(circle at 80% 20%, rgba(125,211,252,0.2), transparent 42%)",
   },
   {
     index: "03",
@@ -55,6 +57,7 @@ export const projects = [
     metric: "20,000+ downloads · 150% retention",
     tags: ["Java", "React", "Android", "Go", "MySQL"],
     href: "https://github.com/sudheerbez",
+    wash: "radial-gradient(circle at 80% 20%, rgba(255,106,61,0.22), transparent 42%)",
   },
   {
     index: "04",
@@ -65,6 +68,7 @@ export const projects = [
     metric: "ML ranking in production",
     tags: ["Spring Boot", "Angular", "Kafka", "TypeScript"],
     href: "https://github.com/sudheerbez/ai-ecommerce-platform",
+    wash: "radial-gradient(circle at 80% 20%, rgba(196,181,253,0.22), transparent 42%)",
   },
   {
     index: "05",
@@ -75,6 +79,7 @@ export const projects = [
     metric: "1951–2024 election atlas",
     tags: ["Python", "D3.js", "TypeScript", "Data Viz"],
     href: "https://github.com/sudheerbez/nifty-options-algorithmic-backtester",
+    wash: "radial-gradient(circle at 80% 20%, rgba(253,224,71,0.18), transparent 42%)",
   },
 ];
 
