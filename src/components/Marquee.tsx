@@ -1,14 +1,16 @@
 const items = [
   "Fintech",
-  "Distributed Systems",
+  "LangChain",
+  "RAG",
+  "Spring AI",
   "Kafka",
   "Spring Boot",
   "React",
+  "GCP",
   "AWS",
-  "Real-time",
-  "Cloud-native",
-  "GraphQL",
+  "Pinecone",
   "Kubernetes",
+  "Terraform",
 ];
 
 export function Marquee() {

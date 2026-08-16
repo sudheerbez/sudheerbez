@@ -20,7 +20,7 @@ export function Nav() {
       </nav>
       <div className="nav-clock">
         <span>{site.location}</span>
-        <em>{time} CT</em>
+        <em>{time} ET</em>
       </div>
     </header>
   );

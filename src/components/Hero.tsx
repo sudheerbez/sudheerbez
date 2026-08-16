@@ -30,7 +30,7 @@ export function Hero({ ready }: Props) {
     <section className="hero section" id="intro">
       <div className="hero-top">
         <p className="hero-index">01 — Intro</p>
-        <p className="hero-aside">Systems that hold when the market doesn’t blink.</p>
+        <p className="hero-aside">AI systems that hold when the market doesn’t blink.</p>
       </div>
 
       <h1 className="hero-title" ref={title} aria-label={`${site.first} ${site.last}`}>
@@ -46,7 +46,7 @@ export function Hero({ ready }: Props) {
         <p className="hero-role">
           {site.role}
           <br />
-          <strong>{site.company}</strong> / Fintech &amp; scale
+          <strong>{site.company}</strong> / Markets &amp; AI
         </p>
         <div className="scroll-cue" aria-hidden>
           <span>Scroll</span>
@@ -57,7 +57,7 @@ export function Hero({ ready }: Props) {
         <p className="hero-loc">
           {site.location}
           <br />
-          Available worldwide
+          United States
         </p>
       </div>
     </section>

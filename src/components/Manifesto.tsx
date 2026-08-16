@@ -42,7 +42,7 @@ export function Manifesto() {
     return () => mm.revert();
   }, []);
 
-  const words = [...manifesto, "REAL-TIME.", "CLOUD-NATIVE.", "MARKET-SPEED."];
+  const words = [...manifesto, "REAL-TIME.", "AI-NATIVE.", "MARKET-SPEED."];
 
   return (
     <section className="manifesto section" id="about" ref={root}>
@@ -52,7 +52,7 @@ export function Manifesto() {
           {words.map((word) => (
             <span
               key={word}
-              className={`word${word.includes("TAPE") || word.includes("MARKET") ? " accent" : ""}`}
+              className={`word${word.includes("TAPE") || word.includes("MARKET") || word.includes("AI") ? " accent" : ""}`}
             >
               {word}
             </span>
@@ -61,11 +61,11 @@ export function Manifesto() {
         <div className="manifesto-bio">
           <img className="portrait" src="./portrait.png" alt="Sudheer Bezawada" />
           <p>
-            I’m a <strong>software engineer at Robinhood</strong> with 5+ years across
-            financial trading, healthcare, and community platforms. M.S. Computer Science,
-            Wichita State — <strong>3.97 GPA</strong>. I care about the unglamorous
-            precision that makes live systems feel inevitable: microservices, event
-            streams, cloud-native rails.
+            I’m a <strong>software engineer at Robinhood in New York</strong> with 5+ years
+            across trading, healthcare, and community platforms. M.S. Computer Science,
+            Wichita State, <strong>Jan 2023 — May 2024, 3.97 GPA</strong>. I ship Java
+            microservices, Kafka, GCP/AWS — and LLM systems (OpenAI, LangChain, RAG,
+            Spring AI) that turn live market data into investor insight.
           </p>
         </div>
       </div>
