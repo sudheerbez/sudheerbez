@@ -1,20 +1,19 @@
 /**
- * Meta OAuth redirect URI (Facebook Login / Embedded Signup).
+ * Meta OAuth redirect callback (Netlify Function).
+ * Path: /api/meta/oauth/callback
  *
- * Add this exact URL under:
- *   Meta App → Facebook Login → Settings → Valid OAuth Redirect URIs
- *
- *   https://sudheerbez.netlify.app/api/meta/oauth/callback
- *
- * Do NOT use the WhatsApp webhook URL here — that belongs under
- * WhatsApp → Configuration → Callback URL.
- *
- * Env (Netlify):
- *   META_APP_ID              — Meta App ID (optional; enables code→token exchange)
- *   META_APP_SECRET          — Meta App Secret (optional; with APP_ID)
- *   META_OAUTH_SUCCESS_URL   — optional; where to send the user after success
+ * Env: META_APP_ID, META_APP_SECRET, META_OAUTH_SUCCESS_URL (optional forward)
  */
 const https = require("https");
+
+function siteOrigin() {
+  const base = process.env.URL || process.env.DEPLOY_PRIME_URL || "";
+  return String(base).replace(/\/$/, "");
+}
+
+function oauthCallbackUrl() {
+  return `${siteOrigin()}/api/meta/oauth/callback`;
+}
 
 function htmlPage(title, body) {
   return `<!DOCTYPE html>
@@ -39,10 +38,7 @@ function exchangeCodeForToken(code) {
   const appSecret = process.env.META_APP_SECRET;
   if (!appId || !appSecret) return Promise.resolve(null);
 
-  const redirectUri = process.env.URL
-    ? `${process.env.URL.replace(/\/$/, "")}/api/meta/oauth/callback`
-    : "https://sudheerbez.netlify.app/api/meta/oauth/callback";
-
+  const redirectUri = oauthCallbackUrl();
   const path =
     `/oauth/access_token?client_id=${encodeURIComponent(appId)}` +
     `&redirect_uri=${encodeURIComponent(redirectUri)}` +
@@ -83,7 +79,6 @@ exports.handler = async (event) => {
 
   const q = event.queryStringParameters || {};
 
-  // Meta Redirect URI Validator often hits with no query params.
   if (!q.code && !q.error && !q.state) {
     return {
       statusCode: 200,
@@ -92,7 +87,7 @@ exports.handler = async (event) => {
         "Meta OAuth callback",
         `<h1 class="ok">Valid OAuth redirect URI</h1>
          <p>This endpoint is ready for Meta OAuth / Embedded Signup.</p>
-         <p>Use: <code>https://sudheerbez.netlify.app/api/meta/oauth/callback</code></p>`
+         <p>Use: <code>${oauthCallbackUrl()}</code></p>`
       ),
     };
   }
@@ -138,7 +133,6 @@ exports.handler = async (event) => {
     const dest = new URL(successUrl);
     if (q.state) dest.searchParams.set("state", q.state);
     if (tokenResult?.access_token) {
-      // Prefer forwarding only a short-lived handoff; avoid putting long tokens in URLs in production.
       dest.searchParams.set("connected", "1");
     } else if (q.code) {
       dest.searchParams.set("code", q.code);
@@ -157,12 +151,7 @@ exports.handler = async (event) => {
       "Connected",
       `<h1 class="ok">Meta authorization received</h1>
        <p>You can close this window and return to your app.</p>
-       ${q.state ? `<p>State: <code>${String(q.state)}</code></p>` : ""}
-       ${
-         tokenResult?.access_token
-           ? `<p>Access token exchanged successfully (logged server-side).</p>`
-           : `<p>Auth code received. Set <code>META_APP_ID</code> and <code>META_APP_SECRET</code> on Netlify to exchange it for a token, or set <code>META_OAUTH_SUCCESS_URL</code> to forward to your agent app.</p>`
-       }`
+       ${q.state ? `<p>State: <code>${String(q.state)}</code></p>` : ""}`
     ),
   };
 };

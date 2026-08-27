@@ -4,23 +4,21 @@
 
 [build.environment]
   NODE_VERSION = "20"
+  # Avoid false positives when optional forward URL resembles site paths in comments
+  SECRETS_SCAN_OMIT_KEYS = "META_OAUTH_SUCCESS_URL"
 
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
-# WhatsApp Cloud API webhook (NOT an OAuth redirect URI):
-#   Meta → WhatsApp → Configuration → Callback URL
-#   https://sudheerbez.netlify.app/api/whatsapp/webhook
+# WhatsApp webhook → Meta WhatsApp Configuration → Callback URL
 [[redirects]]
   from = "/api/whatsapp/webhook"
   to = "/.netlify/functions/whatsapp-webhook"
   status = 200
   force = true
 
-# Meta OAuth / Embedded Signup redirect URI:
-#   Meta → Facebook Login → Settings → Valid OAuth Redirect URIs
-#   https://sudheerbez.netlify.app/api/meta/oauth/callback
+# OAuth callback → Meta Facebook Login → Valid OAuth Redirect URIs
 [[redirects]]
   from = "/api/meta/oauth/callback"
   to = "/.netlify/functions/meta-oauth-callback"

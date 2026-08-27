@@ -1,11 +1,8 @@
 /**
- * Meta WhatsApp Cloud API webhook callback.
- * Callback URL (after Netlify deploy):
- *   https://<your-site>.netlify.app/api/whatsapp/webhook
+ * Meta WhatsApp Cloud API webhook (Netlify Function).
+ * Callback path: /api/whatsapp/webhook
  *
- * Env (set in Netlify → Site settings → Environment variables):
- *   WHATSAPP_VERIFY_TOKEN  — same string you enter in Meta Developer Console
- *   WHATSAPP_APP_SECRET    — optional; App Secret for X-Hub-Signature-256 checks
+ * Env: WHATSAPP_VERIFY_TOKEN, WHATSAPP_APP_SECRET (optional signature check)
  */
 const crypto = require("crypto");
 
@@ -52,8 +49,7 @@ function handleVerification(query) {
 
 function extractInboundMessages(payload) {
   const messages = [];
-  const entries = payload?.entry ?? [];
-  for (const entry of entries) {
+  for (const entry of payload?.entry ?? []) {
     for (const change of entry.changes ?? []) {
       const value = change.value;
       if (!value?.messages) continue;
@@ -66,7 +62,6 @@ function extractInboundMessages(payload) {
           timestamp: msg.timestamp,
           type: msg.type,
           text: msg.text?.body ?? null,
-          raw: msg,
         });
       }
     }
@@ -86,12 +81,17 @@ exports.handler = async (event) => {
       ? Buffer.from(event.body || "", "base64").toString("utf8")
       : event.body || "";
 
-    const appSecret = process.env.WHATSAPP_APP_SECRET;
     const signature =
       event.headers?.["x-hub-signature-256"] ||
       event.headers?.["X-Hub-Signature-256"];
 
-    if (!verifyMetaSignature(rawBody, signature, appSecret)) {
+    if (
+      !verifyMetaSignature(
+        rawBody,
+        signature,
+        process.env.WHATSAPP_APP_SECRET
+      )
+    ) {
       return { statusCode: 401, body: "Invalid signature" };
     }
 
@@ -104,21 +104,9 @@ exports.handler = async (event) => {
 
     const inbound = extractInboundMessages(payload);
     if (inbound.length) {
-      console.log(
-        "whatsapp_inbound",
-        JSON.stringify(
-          inbound.map(({ id, from, type, text, phoneNumberId }) => ({
-            id,
-            from,
-            type,
-            text,
-            phoneNumberId,
-          }))
-        )
-      );
+      console.log("whatsapp_inbound", JSON.stringify(inbound));
     }
 
-    // Acknowledge immediately — Meta retries on non-2xx / timeouts.
     return {
       statusCode: 200,
       headers: { "Content-Type": "application/json" },
