@@ -4,3 +4,15 @@
 
 [build.environment]
   NODE_VERSION = "20"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# Meta WhatsApp callback URL → paste this path in Meta Business / Developer settings:
+#   https://<your-site>.netlify.app/api/whatsapp/webhook
+[[redirects]]
+  from = "/api/whatsapp/webhook"
+  to = "/.netlify/functions/whatsapp-webhook"
+  status = 200
+  force = true
