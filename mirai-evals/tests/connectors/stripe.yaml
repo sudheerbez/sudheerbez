@@ -1,0 +1,91 @@
+# Efficiency prompts — Stripe (6)
+- description: Stripe / direct / EFF-025
+  vars:
+    connector: Stripe
+    efficiency_lens: direct
+    role: ops
+    connectors: Stripe
+    query: |
+      Stripe only. One number: open dispute count right now.
+  assert:
+    - type: icontains
+      value: Stripe
+    - type: llm-rubric
+      value: |
+        Answers with the requested metric in a minimal form (ideally one number or one short line). Avoids long tables, filler, or unrelated connectors.
+
+- description: Stripe / scoped / EFF-026
+  vars:
+    connector: Stripe
+    efficiency_lens: scoped
+    role: ops
+    connectors: Stripe
+    query: |
+      Stripe only. Disputes with evidence due in ≤72 hours. ID + due date only. Cap at 10.
+  assert:
+    - type: icontains
+      value: Stripe
+    - type: llm-rubric
+      value: |
+        Returns only the scoped list/fields requested (caps respected). Does not dump full histories.
+
+- description: Stripe / single_pass / EFF-027
+  vars:
+    connector: Stripe
+    efficiency_lens: single_pass
+    role: ops
+    connectors: Stripe
+    query: |
+      Stripe only. If yesterday's payout is >$50 under expected charges net of fees, create a Finance task for D. Park due today with the gap. Else reply exactly: CLEAR.
+  assert:
+    - type: icontains
+      value: Stripe
+    - type: llm-rubric
+      value: |
+        Either produces the requested action (task/draft, unsent) with needed fields, or replies CLEAR when the condition is not met. Does not ask unnecessary follow-ups if data is available.
+
+- description: Stripe / locked / EFF-028
+  vars:
+    connector: Stripe
+    efficiency_lens: locked
+    role: ops
+    connectors: Stripe
+    query: |
+      Stripe only — do not query Shopify or Square. Failed payments last 24h: count + top failure code.
+  assert:
+    - type: icontains
+      value: Stripe
+    - type: llm-rubric
+      value: |
+        Stays on the named connector only; does not invent pulls from other systems. Answers concisely.
+
+- description: Stripe / compressed / EFF-029
+  vars:
+    connector: Stripe
+    efficiency_lens: compressed
+    role: ops
+    connectors: Stripe
+    query: |
+      Stripe only. Last 7 days fees as one total and % of GMV. Two figures max.
+  assert:
+    - type: icontains
+      value: Stripe
+    - type: llm-rubric
+      value: |
+        Stays within the stated length/structure budget while remaining useful.
+
+- description: Stripe / idle / EFF-030
+  vars:
+    connector: Stripe
+    efficiency_lens: idle
+    role: ops
+    connectors: Stripe
+    query: |
+      Stripe only. Any payout stuck in pending >2 business days? If none, reply exactly: CLEAR.
+  assert:
+    - type: icontains
+      value: Stripe
+    - type: llm-rubric
+      value: |
+        If nothing material, replies CLEAR (or equivalent one-line idle). Does not pad with unrelated status.
+

@@ -1,0 +1,91 @@
+# Efficiency prompts — Clover (6)
+- description: Clover / direct / EFF-013
+  vars:
+    connector: Clover
+    efficiency_lens: direct
+    role: ops
+    connectors: Clover
+    query: |
+      Clover only. One number: open tab count older than 90 minutes right now.
+  assert:
+    - type: icontains
+      value: Clover
+    - type: llm-rubric
+      value: |
+        Answers with the requested metric in a minimal form (ideally one number or one short line). Avoids long tables, filler, or unrelated connectors.
+
+- description: Clover / scoped / EFF-014
+  vars:
+    connector: Clover
+    efficiency_lens: scoped
+    role: ops
+    connectors: Clover
+    query: |
+      Clover only. List declined card attempts over $100 from last night. Amount + last4 only.
+  assert:
+    - type: icontains
+      value: Clover
+    - type: llm-rubric
+      value: |
+        Returns only the scoped list/fields requested (caps respected). Does not dump full histories.
+
+- description: Clover / single_pass / EFF-015
+  vars:
+    connector: Clover
+    efficiency_lens: single_pass
+    role: ops
+    connectors: Clover
+    query: |
+      Clover only. If tip rate last Saturday dinner is under 15%, create a task for the floor lead due before next Saturday. Else reply exactly: CLEAR.
+  assert:
+    - type: icontains
+      value: Clover
+    - type: llm-rubric
+      value: |
+        Either produces the requested action (task/draft, unsent) with needed fields, or replies CLEAR when the condition is not met. Does not ask unnecessary follow-ups if data is available.
+
+- description: Clover / locked / EFF-016
+  vars:
+    connector: Clover
+    efficiency_lens: locked
+    role: ops
+    connectors: Clover
+    query: |
+      Clover only — do not use Square or Toast. Batch settle status for last night: settled or not, one line.
+  assert:
+    - type: icontains
+      value: Clover
+    - type: llm-rubric
+      value: |
+        Stays on the named connector only; does not invent pulls from other systems. Answers concisely.
+
+- description: Clover / compressed / EFF-017
+  vars:
+    connector: Clover
+    efficiency_lens: compressed
+    role: ops
+    connectors: Clover
+    query: |
+      Clover only. Cash vs card mix yesterday in one line with two percentages.
+  assert:
+    - type: icontains
+      value: Clover
+    - type: llm-rubric
+      value: |
+        Stays within the stated length/structure budget while remaining useful.
+
+- description: Clover / idle / EFF-018
+  vars:
+    connector: Clover
+    efficiency_lens: idle
+    role: ops
+    connectors: Clover
+    query: |
+      Clover only. Any unsynced devices in the last hour? If none, reply exactly: CLEAR.
+  assert:
+    - type: icontains
+      value: Clover
+    - type: llm-rubric
+      value: |
+        If nothing material, replies CLEAR (or equivalent one-line idle). Does not pad with unrelated status.
+

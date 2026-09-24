@@ -1,0 +1,91 @@
+# Efficiency prompts — Toast (6)
+- description: Toast / direct / EFF-007
+  vars:
+    connector: Toast
+    efficiency_lens: direct
+    role: ops
+    connectors: Toast
+    query: |
+      Toast only. One number: labor cost % for Downtown dinner last Friday.
+  assert:
+    - type: icontains
+      value: Toast
+    - type: llm-rubric
+      value: |
+        Answers with the requested metric in a minimal form (ideally one number or one short line). Avoids long tables, filler, or unrelated connectors.
+
+- description: Toast / scoped / EFF-008
+  vars:
+    connector: Toast
+    efficiency_lens: scoped
+    role: ops
+    connectors: Toast
+    query: |
+      Toast only. Top 5 menu items by revenue yesterday. Names and totals only — no narrative.
+  assert:
+    - type: icontains
+      value: Toast
+    - type: llm-rubric
+      value: |
+        Returns only the scoped list/fields requested (caps respected). Does not dump full histories.
+
+- description: Toast / single_pass / EFF-009
+  vars:
+    connector: Toast
+    efficiency_lens: single_pass
+    role: ops
+    connectors: Toast
+    query: |
+      Toast only. If open tickets at Downtown exceed 12 right now, draft one Slack alert for #ops (do not send) and stop. If not, reply exactly: CLEAR.
+  assert:
+    - type: icontains
+      value: Toast
+    - type: llm-rubric
+      value: |
+        Either produces the requested action (task/draft, unsent) with needed fields, or replies CLEAR when the condition is not met. Does not ask unnecessary follow-ups if data is available.
+
+- description: Toast / locked / EFF-010
+  vars:
+    connector: Toast
+    efficiency_lens: locked
+    role: ops
+    connectors: Toast
+    query: |
+      Toast only — ignore Square/Clover. Compare this lunch period's covers to the same weekday last week for Downtown. Two numbers and a % delta.
+  assert:
+    - type: icontains
+      value: Toast
+    - type: llm-rubric
+      value: |
+        Stays on the named connector only; does not invent pulls from other systems. Answers concisely.
+
+- description: Toast / compressed / EFF-011
+  vars:
+    connector: Toast
+    efficiency_lens: compressed
+    role: ops
+    connectors: Toast
+    query: |
+      Toast only. Summarize last night's voids and comps in ≤25 words.
+  assert:
+    - type: icontains
+      value: Toast
+    - type: llm-rubric
+      value: |
+        Stays within the stated length/structure budget while remaining useful.
+
+- description: Toast / idle / EFF-012
+  vars:
+    connector: Toast
+    efficiency_lens: idle
+    role: ops
+    connectors: Toast
+    query: |
+      Toast only. Any station with ticket time >20 minutes right now? If none, reply exactly: CLEAR.
+  assert:
+    - type: icontains
+      value: Toast
+    - type: llm-rubric
+      value: |
+        If nothing material, replies CLEAR (or equivalent one-line idle). Does not pad with unrelated status.
+

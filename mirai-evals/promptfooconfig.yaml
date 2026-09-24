@@ -1,24 +1,15 @@
-# Mirai AI — Promptfoo configuration
-# From this folder: npx promptfoo@latest eval && npx promptfoo@latest view
+# Mirai AI — efficiency evals (exactly 100 prompts)
+# npx promptfoo@latest eval
 
-description: Meztli Mirai — client-style connector & workspace evals
+description: Meztli Mirai — connector efficiency suite (100 prompts, no WhatsApp)
 
 prompts:
   - file://prompts/chat.json
 
 providers:
-  # Dry-run placeholder (no API key). Swap for your Mirai endpoint or a lab model:
+  # Swap for Mirai HTTPS or a lab model when grading:
   # - openai:gpt-4o
   # - anthropic:messages:claude-sonnet-4-5
-  # - id: https
-  #   config:
-  #     url: ${MIRAI_API_URL}
-  #     method: POST
-  #     headers:
-  #       Authorization: "Bearer ${MIRAI_API_KEY}"
-  #       Content-Type: application/json
-  #     body: |
-  #       { "messages": {{ messages | dump }} }
   - echo
 
 defaultTest:
@@ -26,19 +17,25 @@ defaultTest:
     role: ops
     connectors: >-
       Square, Toast, Clover, Shopify, Stripe, Plaid, QuickBooks, Xero,
-      Gmail, Google Sheets, Google Drive, WhatsApp, Discord, Slack,
-      Dodo, Notion, Microsoft
+      Gmail, Google Sheets, Google Drive, Discord, Slack, Dodo, Notion, Microsoft
 
 tests:
-  - file://tests/01-insights.yaml
-  - file://tests/02-finances.yaml
-  - file://tests/03-tasks.yaml
-  - file://tests/04-assistant.yaml
-  - file://tests/05-connectors.yaml
-  - file://tests/06-cross-connector.yaml
-  - file://tests/07-roles.yaml
-  - file://tests/08-edge-cases.yaml
-  - file://tests/09-adversarial.yaml
-  - file://tests/10-conversational.yaml
+  - file://tests/connectors/square.yaml
+  - file://tests/connectors/toast.yaml
+  - file://tests/connectors/clover.yaml
+  - file://tests/connectors/shopify.yaml
+  - file://tests/connectors/stripe.yaml
+  - file://tests/connectors/plaid.yaml
+  - file://tests/connectors/quickbooks.yaml
+  - file://tests/connectors/xero.yaml
+  - file://tests/connectors/gmail.yaml
+  - file://tests/connectors/google-sheets.yaml
+  - file://tests/connectors/google-drive.yaml
+  - file://tests/connectors/discord.yaml
+  - file://tests/connectors/slack.yaml
+  - file://tests/connectors/dodo.yaml
+  - file://tests/connectors/notion.yaml
+  - file://tests/connectors/microsoft.yaml
+  - file://tests/cross-efficiency.yaml
 
 outputPath: results/latest.json

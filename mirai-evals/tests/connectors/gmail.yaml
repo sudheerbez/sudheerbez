@@ -1,0 +1,91 @@
+# Efficiency prompts — Gmail (6)
+- description: Gmail / direct / EFF-049
+  vars:
+    connector: Gmail
+    efficiency_lens: direct
+    role: ops
+    connectors: Gmail
+    query: |
+      Gmail only. One number: unread vendor emails in the last 72 hours.
+  assert:
+    - type: icontains
+      value: Gmail
+    - type: llm-rubric
+      value: |
+        Answers with the requested metric in a minimal form (ideally one number or one short line). Avoids long tables, filler, or unrelated connectors.
+
+- description: Gmail / scoped / EFF-050
+  vars:
+    connector: Gmail
+    efficiency_lens: scoped
+    role: ops
+    connectors: Gmail
+    query: |
+      Gmail only. Subject lines of the 5 most recent unread finance-tagged threads. Subjects only.
+  assert:
+    - type: icontains
+      value: Gmail
+    - type: llm-rubric
+      value: |
+        Returns only the scoped list/fields requested (caps respected). Does not dump full histories.
+
+- description: Gmail / single_pass / EFF-051
+  vars:
+    connector: Gmail
+    efficiency_lens: single_pass
+    role: ops
+    connectors: Gmail
+    query: |
+      Gmail only. If any landlord email is unread >48h, draft a reply (do not send) and create a Mail task for M. Ortiz due today. Else reply exactly: CLEAR.
+  assert:
+    - type: icontains
+      value: Gmail
+    - type: llm-rubric
+      value: |
+        Either produces the requested action (task/draft, unsent) with needed fields, or replies CLEAR when the condition is not met. Does not ask unnecessary follow-ups if data is available.
+
+- description: Gmail / locked / EFF-052
+  vars:
+    connector: Gmail
+    efficiency_lens: locked
+    role: ops
+    connectors: Gmail
+    query: |
+      Gmail only — do not search Drive or Notion. Newest payroll-provider email: date + one-line summary.
+  assert:
+    - type: icontains
+      value: Gmail
+    - type: llm-rubric
+      value: |
+        Stays on the named connector only; does not invent pulls from other systems. Answers concisely.
+
+- description: Gmail / compressed / EFF-053
+  vars:
+    connector: Gmail
+    efficiency_lens: compressed
+    role: ops
+    connectors: Gmail
+    query: |
+      Gmail only. Compress the latest vendor complaint thread into ≤30 words. No quotes dump.
+  assert:
+    - type: icontains
+      value: Gmail
+    - type: llm-rubric
+      value: |
+        Stays within the stated length/structure budget while remaining useful.
+
+- description: Gmail / idle / EFF-054
+  vars:
+    connector: Gmail
+    efficiency_lens: idle
+    role: ops
+    connectors: Gmail
+    query: |
+      Gmail only. Any draft older than 24h still waiting on approval? If none, reply exactly: CLEAR.
+  assert:
+    - type: icontains
+      value: Gmail
+    - type: llm-rubric
+      value: |
+        If nothing material, replies CLEAR (or equivalent one-line idle). Does not pad with unrelated status.
+

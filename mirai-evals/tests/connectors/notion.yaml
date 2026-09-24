@@ -1,0 +1,91 @@
+# Efficiency prompts — Notion (6)
+- description: Notion / direct / EFF-085
+  vars:
+    connector: Notion
+    efficiency_lens: direct
+    role: ops
+    connectors: Notion
+    query: |
+      Notion only. One number: open action items assigned to me in 'Weekly Ops'.
+  assert:
+    - type: icontains
+      value: Notion
+    - type: llm-rubric
+      value: |
+        Answers with the requested metric in a minimal form (ideally one number or one short line). Avoids long tables, filler, or unrelated connectors.
+
+- description: Notion / scoped / EFF-086
+  vars:
+    connector: Notion
+    efficiency_lens: scoped
+    role: ops
+    connectors: Notion
+    query: |
+      Notion only. Overdue items in 'Weekly Ops'. Title + owner + days overdue. Cap 10.
+  assert:
+    - type: icontains
+      value: Notion
+    - type: llm-rubric
+      value: |
+        Returns only the scoped list/fields requested (caps respected). Does not dump full histories.
+
+- description: Notion / single_pass / EFF-087
+  vars:
+    connector: Notion
+    efficiency_lens: single_pass
+    role: ops
+    connectors: Notion
+    query: |
+      Notion only. If any 'Weekly Ops' item is overdue >2 days, escalate a task to workspace admin with titles. Else reply exactly: CLEAR.
+  assert:
+    - type: icontains
+      value: Notion
+    - type: llm-rubric
+      value: |
+        Either produces the requested action (task/draft, unsent) with needed fields, or replies CLEAR when the condition is not met. Does not ask unnecessary follow-ups if data is available.
+
+- description: Notion / locked / EFF-088
+  vars:
+    connector: Notion
+    efficiency_lens: locked
+    role: ops
+    connectors: Notion
+    query: |
+      Notion only — do not open Drive. Q3 targets from the board-pack page: list targets only.
+  assert:
+    - type: icontains
+      value: Notion
+    - type: llm-rubric
+      value: |
+        Stays on the named connector only; does not invent pulls from other systems. Answers concisely.
+
+- description: Notion / compressed / EFF-089
+  vars:
+    connector: Notion
+    efficiency_lens: compressed
+    role: ops
+    connectors: Notion
+    query: |
+      Notion only. Summarize page 'Incident 9/22' in ≤40 words.
+  assert:
+    - type: icontains
+      value: Notion
+    - type: llm-rubric
+      value: |
+        Stays within the stated length/structure budget while remaining useful.
+
+- description: Notion / idle / EFF-090
+  vars:
+    connector: Notion
+    efficiency_lens: idle
+    role: ops
+    connectors: Notion
+    query: |
+      Notion only. Any database sync errors on 'Weekly Ops'? If none, reply exactly: CLEAR.
+  assert:
+    - type: icontains
+      value: Notion
+    - type: llm-rubric
+      value: |
+        If nothing material, replies CLEAR (or equivalent one-line idle). Does not pad with unrelated status.
+

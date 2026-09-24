@@ -1,0 +1,91 @@
+# Efficiency prompts — Google Sheets (6)
+- description: Google Sheets / direct / EFF-055
+  vars:
+    connector: Google Sheets
+    efficiency_lens: direct
+    role: ops
+    connectors: Google Sheets
+    query: |
+      Google Sheets only. From 'Daily Close', one number: count of stores red on labor % today.
+  assert:
+    - type: icontains
+      value: Sheets
+    - type: llm-rubric
+      value: |
+        Answers with the requested metric in a minimal form (ideally one number or one short line). Avoids long tables, filler, or unrelated connectors.
+
+- description: Google Sheets / scoped / EFF-056
+  vars:
+    connector: Google Sheets
+    efficiency_lens: scoped
+    role: ops
+    connectors: Google Sheets
+    query: |
+      Google Sheets only. 'Ops KPIs' — rows where variance >3%. Store + variance only. Cap 10.
+  assert:
+    - type: icontains
+      value: Sheets
+    - type: llm-rubric
+      value: |
+        Returns only the scoped list/fields requested (caps respected). Does not dump full histories.
+
+- description: Google Sheets / single_pass / EFF-057
+  vars:
+    connector: Google Sheets
+    efficiency_lens: single_pass
+    role: ops
+    connectors: Google Sheets
+    query: |
+      Google Sheets only. If any store variance >5% vs plan, create a Finance task for D. Park due today attaching those rows. Else reply exactly: CLEAR.
+  assert:
+    - type: icontains
+      value: Sheets
+    - type: llm-rubric
+      value: |
+        Either produces the requested action (task/draft, unsent) with needed fields, or replies CLEAR when the condition is not met. Does not ask unnecessary follow-ups if data is available.
+
+- description: Google Sheets / locked / EFF-058
+  vars:
+    connector: Google Sheets
+    efficiency_lens: locked
+    role: ops
+    connectors: Google Sheets
+    query: |
+      Google Sheets only — do not call POS connectors. Yesterday's sheet total for Downtown sales.
+  assert:
+    - type: icontains
+      value: Sheets
+    - type: llm-rubric
+      value: |
+        Stays on the named connector only; does not invent pulls from other systems. Answers concisely.
+
+- description: Google Sheets / compressed / EFF-059
+  vars:
+    connector: Google Sheets
+    efficiency_lens: compressed
+    role: ops
+    connectors: Google Sheets
+    query: |
+      Google Sheets only. Overnight changes on 'Ops KPIs' in ≤3 bullets, max 40 words.
+  assert:
+    - type: icontains
+      value: Sheets
+    - type: llm-rubric
+      value: |
+        Stays within the stated length/structure budget while remaining useful.
+
+- description: Google Sheets / idle / EFF-060
+  vars:
+    connector: Google Sheets
+    efficiency_lens: idle
+    role: ops
+    connectors: Google Sheets
+    query: |
+      Google Sheets only. Any #REF! or stale-import flags on 'Daily Close'? If none, reply exactly: CLEAR.
+  assert:
+    - type: icontains
+      value: Sheets
+    - type: llm-rubric
+      value: |
+        If nothing material, replies CLEAR (or equivalent one-line idle). Does not pad with unrelated status.
+

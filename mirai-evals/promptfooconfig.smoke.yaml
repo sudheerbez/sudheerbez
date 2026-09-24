@@ -1,7 +1,7 @@
-# Smoke config — no LLM grader needed. Validates prompts load and provider responds.
+# Smoke — load all 100 efficiency prompts (no grader key required)
 # npx promptfoo@latest eval -c promptfooconfig.smoke.yaml
 
-description: Meztli Mirai — smoke load of all client prompts
+description: Meztli Mirai — efficiency catalog smoke (100)
 
 prompts:
   - "{{prompt}}"

@@ -1,0 +1,91 @@
+# Efficiency prompts — Square (6)
+- description: Square / direct / EFF-001
+  vars:
+    connector: Square
+    efficiency_lens: direct
+    role: ops
+    connectors: Square
+    query: |
+      Square only. Reply with yesterday's total sales as one number and the currency. No tables, no commentary.
+  assert:
+    - type: icontains
+      value: Square
+    - type: llm-rubric
+      value: |
+        Answers with the requested metric in a minimal form (ideally one number or one short line). Avoids long tables, filler, or unrelated connectors.
+
+- description: Square / scoped / EFF-002
+  vars:
+    connector: Square
+    efficiency_lens: scoped
+    role: ops
+    connectors: Square
+    query: |
+      Square only. List the 3 largest voids from yesterday over $50. If fewer than 3, list all. Nothing else.
+  assert:
+    - type: icontains
+      value: Square
+    - type: llm-rubric
+      value: |
+        Returns only the scoped list/fields requested (caps respected). Does not dump full histories.
+
+- description: Square / single_pass / EFF-003
+  vars:
+    connector: Square
+    efficiency_lens: single_pass
+    role: ops
+    connectors: Square
+    query: |
+      Square only. If Downtown sales are >10% under the 7-day average, create one task for the GM due today with the gap amount attached. If not under, reply exactly: CLEAR.
+  assert:
+    - type: icontains
+      value: Square
+    - type: llm-rubric
+      value: |
+        Either produces the requested action (task/draft, unsent) with needed fields, or replies CLEAR when the condition is not met. Does not ask unnecessary follow-ups if data is available.
+
+- description: Square / locked / EFF-004
+  vars:
+    connector: Square
+    efficiency_lens: locked
+    role: ops
+    connectors: Square
+    query: |
+      Use Square only — do not query Sheets, Stripe, or any other connector. What was average ticket size at Midtown last Saturday dinner?
+  assert:
+    - type: icontains
+      value: Square
+    - type: llm-rubric
+      value: |
+        Stays on the named connector only; does not invent pulls from other systems. Answers concisely.
+
+- description: Square / compressed / EFF-005
+  vars:
+    connector: Square
+    efficiency_lens: compressed
+    role: ops
+    connectors: Square
+    query: |
+      Square only. Compress last week's hourly sales for Downtown into 3 bullets: peak hour, slowest hour, YoY direction. Max 40 words.
+  assert:
+    - type: icontains
+      value: Square
+    - type: llm-rubric
+      value: |
+        Stays within the stated length/structure budget while remaining useful.
+
+- description: Square / idle / EFF-006
+  vars:
+    connector: Square
+    efficiency_lens: idle
+    role: ops
+    connectors: Square
+    query: |
+      Square only. Any location with a sync error or zero sales while scheduled open in the last 2 hours? If none, reply exactly: CLEAR.
+  assert:
+    - type: icontains
+      value: Square
+    - type: llm-rubric
+      value: |
+        If nothing material, replies CLEAR (or equivalent one-line idle). Does not pad with unrelated status.
+

@@ -1,0 +1,91 @@
+# Efficiency prompts — Slack (6)
+- description: Slack / direct / EFF-073
+  vars:
+    connector: Slack
+    efficiency_lens: direct
+    role: ops
+    connectors: Slack
+    query: |
+      Slack only. One number: open reminders for me due today.
+  assert:
+    - type: icontains
+      value: Slack
+    - type: llm-rubric
+      value: |
+        Answers with the requested metric in a minimal form (ideally one number or one short line). Avoids long tables, filler, or unrelated connectors.
+
+- description: Slack / scoped / EFF-074
+  vars:
+    connector: Slack
+    efficiency_lens: scoped
+    role: ops
+    connectors: Slack
+    query: |
+      Slack only. Decisions recorded in #ops-standup today. Bullets, max 5. No filler.
+  assert:
+    - type: icontains
+      value: Slack
+    - type: llm-rubric
+      value: |
+        Returns only the scoped list/fields requested (caps respected). Does not dump full histories.
+
+- description: Slack / single_pass / EFF-075
+  vars:
+    connector: Slack
+    efficiency_lens: single_pass
+    role: ops
+    connectors: Slack
+    query: |
+      Slack only. Draft a #finance alert about any payout gap keyword in today's #finance thread (do not send). If none, reply exactly: CLEAR.
+  assert:
+    - type: icontains
+      value: Slack
+    - type: llm-rubric
+      value: |
+        Either produces the requested action (task/draft, unsent) with needed fields, or replies CLEAR when the condition is not met. Does not ask unnecessary follow-ups if data is available.
+
+- description: Slack / locked / EFF-076
+  vars:
+    connector: Slack
+    efficiency_lens: locked
+    role: ops
+    connectors: Slack
+    query: |
+      Slack only — do not read Discord or Gmail. Unresolved questions in #ops from the last 4 hours. Max 3 lines.
+  assert:
+    - type: icontains
+      value: Slack
+    - type: llm-rubric
+      value: |
+        Stays on the named connector only; does not invent pulls from other systems. Answers concisely.
+
+- description: Slack / compressed / EFF-077
+  vars:
+    connector: Slack
+    efficiency_lens: compressed
+    role: ops
+    connectors: Slack
+    query: |
+      Slack only. #incidents last 24h in ≤25 words.
+  assert:
+    - type: icontains
+      value: Slack
+    - type: llm-rubric
+      value: |
+        Stays within the stated length/structure budget while remaining useful.
+
+- description: Slack / idle / EFF-078
+  vars:
+    connector: Slack
+    efficiency_lens: idle
+    role: ops
+    connectors: Slack
+    query: |
+      Slack only. Any failed workflow notifications in the last hour? If none, reply exactly: CLEAR.
+  assert:
+    - type: icontains
+      value: Slack
+    - type: llm-rubric
+      value: |
+        If nothing material, replies CLEAR (or equivalent one-line idle). Does not pad with unrelated status.
+

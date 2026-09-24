@@ -1,0 +1,91 @@
+# Efficiency prompts — Dodo (6)
+- description: Dodo / direct / EFF-079
+  vars:
+    connector: Dodo
+    efficiency_lens: direct
+    role: ops
+    connectors: Dodo
+    query: |
+      Dodo only. One number: failed payments in the last 24 hours.
+  assert:
+    - type: icontains
+      value: Dodo
+    - type: llm-rubric
+      value: |
+        Answers with the requested metric in a minimal form (ideally one number or one short line). Avoids long tables, filler, or unrelated connectors.
+
+- description: Dodo / scoped / EFF-080
+  vars:
+    connector: Dodo
+    efficiency_lens: scoped
+    role: ops
+    connectors: Dodo
+    query: |
+      Dodo only. Failure reasons breakdown last 7 days. Reason + count. Top 5 only.
+  assert:
+    - type: icontains
+      value: Dodo
+    - type: llm-rubric
+      value: |
+        Returns only the scoped list/fields requested (caps respected). Does not dump full histories.
+
+- description: Dodo / single_pass / EFF-081
+  vars:
+    connector: Dodo
+    efficiency_lens: single_pass
+    role: ops
+    connectors: Dodo
+    query: |
+      Dodo only. If failures last 6h exceed 20, draft a Slack eng alert (do not send) with top reason. Else reply exactly: CLEAR.
+  assert:
+    - type: icontains
+      value: Dodo
+    - type: llm-rubric
+      value: |
+        Either produces the requested action (task/draft, unsent) with needed fields, or replies CLEAR when the condition is not met. Does not ask unnecessary follow-ups if data is available.
+
+- description: Dodo / locked / EFF-082
+  vars:
+    connector: Dodo
+    efficiency_lens: locked
+    role: ops
+    connectors: Dodo
+    query: |
+      Dodo only — do not query Shopify. Successful payment count last 24h.
+  assert:
+    - type: icontains
+      value: Dodo
+    - type: llm-rubric
+      value: |
+        Stays on the named connector only; does not invent pulls from other systems. Answers concisely.
+
+- description: Dodo / compressed / EFF-083
+  vars:
+    connector: Dodo
+    efficiency_lens: compressed
+    role: ops
+    connectors: Dodo
+    query: |
+      Dodo only. Authorization rate today vs 7-day average in one line.
+  assert:
+    - type: icontains
+      value: Dodo
+    - type: llm-rubric
+      value: |
+        Stays within the stated length/structure budget while remaining useful.
+
+- description: Dodo / idle / EFF-084
+  vars:
+    connector: Dodo
+    efficiency_lens: idle
+    role: ops
+    connectors: Dodo
+    query: |
+      Dodo only. Any webhook delivery failures in the last hour? If none, reply exactly: CLEAR.
+  assert:
+    - type: icontains
+      value: Dodo
+    - type: llm-rubric
+      value: |
+        If nothing material, replies CLEAR (or equivalent one-line idle). Does not pad with unrelated status.
+

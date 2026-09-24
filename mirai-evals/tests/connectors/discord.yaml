@@ -1,0 +1,91 @@
+# Efficiency prompts — Discord (6)
+- description: Discord / direct / EFF-067
+  vars:
+    connector: Discord
+    efficiency_lens: direct
+    role: ops
+    connectors: Discord
+    query: |
+      Discord only. One number: messages in #incidents since yesterday 17:00.
+  assert:
+    - type: icontains
+      value: Discord
+    - type: llm-rubric
+      value: |
+        Answers with the requested metric in a minimal form (ideally one number or one short line). Avoids long tables, filler, or unrelated connectors.
+
+- description: Discord / scoped / EFF-068
+  vars:
+    connector: Discord
+    efficiency_lens: scoped
+    role: ops
+    connectors: Discord
+    query: |
+      Discord only. Last 5 messages in #incidents. Author + first 80 chars. No extras.
+  assert:
+    - type: icontains
+      value: Discord
+    - type: llm-rubric
+      value: |
+        Returns only the scoped list/fields requested (caps respected). Does not dump full histories.
+
+- description: Discord / single_pass / EFF-069
+  vars:
+    connector: Discord
+    efficiency_lens: single_pass
+    role: ops
+    connectors: Discord
+    query: |
+      Discord only. Draft this week's ops digest for #announcements from pinned brief if present (do not post). If nothing to say, reply exactly: CLEAR.
+  assert:
+    - type: icontains
+      value: Discord
+    - type: llm-rubric
+      value: |
+        Either produces the requested action (task/draft, unsent) with needed fields, or replies CLEAR when the condition is not met. Does not ask unnecessary follow-ups if data is available.
+
+- description: Discord / locked / EFF-070
+  vars:
+    connector: Discord
+    efficiency_lens: locked
+    role: ops
+    connectors: Discord
+    query: |
+      Discord only — do not read Slack. Open action items mentioned in #ops today. Bullets, max 5.
+  assert:
+    - type: icontains
+      value: Discord
+    - type: llm-rubric
+      value: |
+        Stays on the named connector only; does not invent pulls from other systems. Answers concisely.
+
+- description: Discord / compressed / EFF-071
+  vars:
+    connector: Discord
+    efficiency_lens: compressed
+    role: ops
+    connectors: Discord
+    query: |
+      Discord only. Summarize #incidents since yesterday in ≤30 words.
+  assert:
+    - type: icontains
+      value: Discord
+    - type: llm-rubric
+      value: |
+        Stays within the stated length/structure budget while remaining useful.
+
+- description: Discord / idle / EFF-072
+  vars:
+    connector: Discord
+    efficiency_lens: idle
+    role: ops
+    connectors: Discord
+    query: |
+      Discord only. Any unread @here/@everyone in ops channels today? If none, reply exactly: CLEAR.
+  assert:
+    - type: icontains
+      value: Discord
+    - type: llm-rubric
+      value: |
+        If nothing material, replies CLEAR (or equivalent one-line idle). Does not pad with unrelated status.
+

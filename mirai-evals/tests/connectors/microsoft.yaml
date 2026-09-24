@@ -1,0 +1,91 @@
+# Efficiency prompts — Microsoft (6)
+- description: Microsoft / direct / EFF-091
+  vars:
+    connector: Microsoft
+    efficiency_lens: direct
+    role: ops
+    connectors: Microsoft
+    query: |
+      Microsoft only. One number: unread Outlook emails from landlords.
+  assert:
+    - type: icontains
+      value: Microsoft
+    - type: llm-rubric
+      value: |
+        Answers with the requested metric in a minimal form (ideally one number or one short line). Avoids long tables, filler, or unrelated connectors.
+
+- description: Microsoft / scoped / EFF-092
+  vars:
+    connector: Microsoft
+    efficiency_lens: scoped
+    role: ops
+    connectors: Microsoft
+    query: |
+      Microsoft only. OneDrive files shared with me this week. Name + sharer. Cap 5.
+  assert:
+    - type: icontains
+      value: Microsoft
+    - type: llm-rubric
+      value: |
+        Returns only the scoped list/fields requested (caps respected). Does not dump full histories.
+
+- description: Microsoft / single_pass / EFF-093
+  vars:
+    connector: Microsoft
+    efficiency_lens: single_pass
+    role: ops
+    connectors: Microsoft
+    query: |
+      Microsoft only. If West region is under plan MTD in the regional sales workbook, draft an Outlook status to the regional manager (do not send). Else reply exactly: CLEAR.
+  assert:
+    - type: icontains
+      value: Microsoft
+    - type: llm-rubric
+      value: |
+        Either produces the requested action (task/draft, unsent) with needed fields, or replies CLEAR when the condition is not met. Does not ask unnecessary follow-ups if data is available.
+
+- description: Microsoft / locked / EFF-094
+  vars:
+    connector: Microsoft
+    efficiency_lens: locked
+    role: ops
+    connectors: Microsoft
+    query: |
+      Microsoft only — do not use Google Drive/Sheets. Close-checklist items still red in the Excel close file. Names only.
+  assert:
+    - type: icontains
+      value: Microsoft
+    - type: llm-rubric
+      value: |
+        Stays on the named connector only; does not invent pulls from other systems. Answers concisely.
+
+- description: Microsoft / compressed / EFF-095
+  vars:
+    connector: Microsoft
+    efficiency_lens: compressed
+    role: ops
+    connectors: Microsoft
+    query: |
+      Microsoft only. Latest landlord email in ≤25 words.
+  assert:
+    - type: icontains
+      value: Microsoft
+    - type: llm-rubric
+      value: |
+        Stays within the stated length/structure budget while remaining useful.
+
+- description: Microsoft / idle / EFF-096
+  vars:
+    connector: Microsoft
+    efficiency_lens: idle
+    role: ops
+    connectors: Microsoft
+    query: |
+      Microsoft only. Any Outlook rules or connector auth errors? If none, reply exactly: CLEAR.
+  assert:
+    - type: icontains
+      value: Microsoft
+    - type: llm-rubric
+      value: |
+        If nothing material, replies CLEAR (or equivalent one-line idle). Does not pad with unrelated status.
+

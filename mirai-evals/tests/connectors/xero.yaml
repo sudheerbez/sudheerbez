@@ -1,0 +1,91 @@
+# Efficiency prompts — Xero (6)
+- description: Xero / direct / EFF-043
+  vars:
+    connector: Xero
+    efficiency_lens: direct
+    role: ops
+    connectors: Xero
+    query: |
+      Xero only. One number: unmatched bank reconciliation items.
+  assert:
+    - type: icontains
+      value: Xero
+    - type: llm-rubric
+      value: |
+        Answers with the requested metric in a minimal form (ideally one number or one short line). Avoids long tables, filler, or unrelated connectors.
+
+- description: Xero / scoped / EFF-044
+  vars:
+    connector: Xero
+    efficiency_lens: scoped
+    role: ops
+    connectors: Xero
+    query: |
+      Xero only. List unmatched items over $200. Date + amount + description. Cap 10.
+  assert:
+    - type: icontains
+      value: Xero
+    - type: llm-rubric
+      value: |
+        Returns only the scoped list/fields requested (caps respected). Does not dump full histories.
+
+- description: Xero / single_pass / EFF-045
+  vars:
+    connector: Xero
+    efficiency_lens: single_pass
+    role: ops
+    connectors: Xero
+    query: |
+      Xero only. If unmatched items exceed 15, create a close-task for the bookkeeper due EOD. Else reply exactly: CLEAR.
+  assert:
+    - type: icontains
+      value: Xero
+    - type: llm-rubric
+      value: |
+        Either produces the requested action (task/draft, unsent) with needed fields, or replies CLEAR when the condition is not met. Does not ask unnecessary follow-ups if data is available.
+
+- description: Xero / locked / EFF-046
+  vars:
+    connector: Xero
+    efficiency_lens: locked
+    role: ops
+    connectors: Xero
+    query: |
+      Xero only — do not query QuickBooks. Month-to-date revenue vs budget: two numbers and variance %.
+  assert:
+    - type: icontains
+      value: Xero
+    - type: llm-rubric
+      value: |
+        Stays on the named connector only; does not invent pulls from other systems. Answers concisely.
+
+- description: Xero / compressed / EFF-047
+  vars:
+    connector: Xero
+    efficiency_lens: compressed
+    role: ops
+    connectors: Xero
+    query: |
+      Xero only. Bank rec status in ≤15 words.
+  assert:
+    - type: icontains
+      value: Xero
+    - type: llm-rubric
+      value: |
+        Stays within the stated length/structure budget while remaining useful.
+
+- description: Xero / idle / EFF-048
+  vars:
+    connector: Xero
+    efficiency_lens: idle
+    role: ops
+    connectors: Xero
+    query: |
+      Xero only. Any sync errors in the last 24 hours? If none, reply exactly: CLEAR.
+  assert:
+    - type: icontains
+      value: Xero
+    - type: llm-rubric
+      value: |
+        If nothing material, replies CLEAR (or equivalent one-line idle). Does not pad with unrelated status.
+

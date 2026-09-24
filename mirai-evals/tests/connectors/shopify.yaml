@@ -1,0 +1,91 @@
+# Efficiency prompts — Shopify (6)
+- description: Shopify / direct / EFF-019
+  vars:
+    connector: Shopify
+    efficiency_lens: direct
+    role: ops
+    connectors: Shopify
+    query: |
+      Shopify only. One number: unfulfilled orders older than 48 hours.
+  assert:
+    - type: icontains
+      value: Shopify
+    - type: llm-rubric
+      value: |
+        Answers with the requested metric in a minimal form (ideally one number or one short line). Avoids long tables, filler, or unrelated connectors.
+
+- description: Shopify / scoped / EFF-020
+  vars:
+    connector: Shopify
+    efficiency_lens: scoped
+    role: ops
+    connectors: Shopify
+    query: |
+      Shopify only. Top 3 SKUs by units sold today. SKU and units only.
+  assert:
+    - type: icontains
+      value: Shopify
+    - type: llm-rubric
+      value: |
+        Returns only the scoped list/fields requested (caps respected). Does not dump full histories.
+
+- description: Shopify / single_pass / EFF-021
+  vars:
+    connector: Shopify
+    efficiency_lens: single_pass
+    role: ops
+    connectors: Shopify
+    query: |
+      Shopify only. If refund rate today exceeds 5%, draft a Gmail note to Support lead (do not send) with the rate. Else reply exactly: CLEAR.
+  assert:
+    - type: icontains
+      value: Shopify
+    - type: llm-rubric
+      value: |
+        Either produces the requested action (task/draft, unsent) with needed fields, or replies CLEAR when the condition is not met. Does not ask unnecessary follow-ups if data is available.
+
+- description: Shopify / locked / EFF-022
+  vars:
+    connector: Shopify
+    efficiency_lens: locked
+    role: ops
+    connectors: Shopify
+    query: |
+      Shopify only — do not pull Stripe. Abandoned checkouts in the last 6 hours: count only.
+  assert:
+    - type: icontains
+      value: Shopify
+    - type: llm-rubric
+      value: |
+        Stays on the named connector only; does not invent pulls from other systems. Answers concisely.
+
+- description: Shopify / compressed / EFF-023
+  vars:
+    connector: Shopify
+    efficiency_lens: compressed
+    role: ops
+    connectors: Shopify
+    query: |
+      Shopify only. Yesterday's order funnel (sessions → checkout → paid) in one line.
+  assert:
+    - type: icontains
+      value: Shopify
+    - type: llm-rubric
+      value: |
+        Stays within the stated length/structure budget while remaining useful.
+
+- description: Shopify / idle / EFF-024
+  vars:
+    connector: Shopify
+    efficiency_lens: idle
+    role: ops
+    connectors: Shopify
+    query: |
+      Shopify only. Any fulfillment SLA breaches open right now? If none, reply exactly: CLEAR.
+  assert:
+    - type: icontains
+      value: Shopify
+    - type: llm-rubric
+      value: |
+        If nothing material, replies CLEAR (or equivalent one-line idle). Does not pad with unrelated status.
+

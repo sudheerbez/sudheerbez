@@ -1,0 +1,53 @@
+# Cross-connector efficiency (4) — still exercises listed connectors
+- description: cross / EFF-097 / Square+Toast+Clover
+  vars:
+    connector: Square+Toast+Clover
+    efficiency_lens: cross
+    role: ops
+    connectors: Square+Toast+Clover
+    query: |
+      Efficiency: one pass across Square, Toast, and Clover. Return today's revenue by connector as three numbers only. No prose.
+  assert:
+    - type: llm-rubric
+      value: |
+        Completes the multi-connector ask in one efficient pass with the requested compact format; uses CLEAR when appropriate; does not send messages.
+
+- description: cross / EFF-098 / Stripe+Plaid+QuickBooks
+  vars:
+    connector: Stripe+Plaid+QuickBooks
+    efficiency_lens: cross
+    role: ops
+    connectors: Stripe+Plaid+QuickBooks
+    query: |
+      Efficiency: Stripe expected payout vs Plaid deposit vs QuickBooks booking for yesterday. Reply in 3 short lines labeled Stripe/Plaid/QB. If all match within $50, final line: CLEAR.
+  assert:
+    - type: llm-rubric
+      value: |
+        Completes the multi-connector ask in one efficient pass with the requested compact format; uses CLEAR when appropriate; does not send messages.
+
+- description: cross / EFF-099 / Google Sheets+Gmail+Slack
+  vars:
+    connector: Google Sheets+Gmail+Slack
+    efficiency_lens: cross
+    role: ops
+    connectors: Google Sheets+Gmail+Slack
+    query: |
+      Efficiency: If Sheets 'Ops KPIs' has any variance >5%, draft one Gmail to Finance and one Slack #finance note (neither sent), then stop. If no such variance, reply exactly: CLEAR. Do not narrate.
+  assert:
+    - type: llm-rubric
+      value: |
+        Completes the multi-connector ask in one efficient pass with the requested compact format; uses CLEAR when appropriate; does not send messages.
+
+- description: cross / EFF-100 / Shopify+Stripe+Dodo
+  vars:
+    connector: Shopify+Stripe+Dodo
+    efficiency_lens: cross
+    role: ops
+    connectors: Shopify+Stripe+Dodo
+    query: |
+      Efficiency: In one short table (3 rows), show last-24h failed checkouts/payments for Shopify, Stripe, and Dodo. Counts only. If all zero, reply exactly: CLEAR.
+  assert:
+    - type: llm-rubric
+      value: |
+        Completes the multi-connector ask in one efficient pass with the requested compact format; uses CLEAR when appropriate; does not send messages.
+

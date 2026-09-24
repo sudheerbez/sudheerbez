@@ -1,0 +1,91 @@
+# Efficiency prompts — Google Drive (6)
+- description: Google Drive / direct / EFF-061
+  vars:
+    connector: Google Drive
+    efficiency_lens: direct
+    role: ops
+    connectors: Google Drive
+    query: |
+      Google Drive only. One answer: link (or file id) of the latest 'Q3 workbook'.
+  assert:
+    - type: icontains
+      value: Drive
+    - type: llm-rubric
+      value: |
+        Answers with the requested metric in a minimal form (ideally one number or one short line). Avoids long tables, filler, or unrelated connectors.
+
+- description: Google Drive / scoped / EFF-062
+  vars:
+    connector: Google Drive
+    efficiency_lens: scoped
+    role: ops
+    connectors: Google Drive
+    query: |
+      Google Drive only. Files shared with ops in the last 7 days. Name + sharer. Cap 5.
+  assert:
+    - type: icontains
+      value: Drive
+    - type: llm-rubric
+      value: |
+        Returns only the scoped list/fields requested (caps respected). Does not dump full histories.
+
+- description: Google Drive / single_pass / EFF-063
+  vars:
+    connector: Google Drive
+    efficiency_lens: single_pass
+    role: ops
+    connectors: Google Drive
+    query: |
+      Google Drive only. If 'Q3 workbook' is not shared with ops, prepare a share action for L. Chen to approve and create a Docs task due Thursday. Else reply exactly: CLEAR.
+  assert:
+    - type: icontains
+      value: Drive
+    - type: llm-rubric
+      value: |
+        Either produces the requested action (task/draft, unsent) with needed fields, or replies CLEAR when the condition is not met. Does not ask unnecessary follow-ups if data is available.
+
+- description: Google Drive / locked / EFF-064
+  vars:
+    connector: Google Drive
+    efficiency_lens: locked
+    role: ops
+    connectors: Google Drive
+    query: |
+      Google Drive only — do not open Sheets cells. Who has edit access on the franchise playbook PDF? Names only.
+  assert:
+    - type: icontains
+      value: Drive
+    - type: llm-rubric
+      value: |
+        Stays on the named connector only; does not invent pulls from other systems. Answers concisely.
+
+- description: Google Drive / compressed / EFF-065
+  vars:
+    connector: Google Drive
+    efficiency_lens: compressed
+    role: ops
+    connectors: Google Drive
+    query: |
+      Google Drive only. Describe the latest board-pack PDF in ≤25 words.
+  assert:
+    - type: icontains
+      value: Drive
+    - type: llm-rubric
+      value: |
+        Stays within the stated length/structure budget while remaining useful.
+
+- description: Google Drive / idle / EFF-066
+  vars:
+    connector: Google Drive
+    efficiency_lens: idle
+    role: ops
+    connectors: Google Drive
+    query: |
+      Google Drive only. Any files pending external share approval? If none, reply exactly: CLEAR.
+  assert:
+    - type: icontains
+      value: Drive
+    - type: llm-rubric
+      value: |
+        If nothing material, replies CLEAR (or equivalent one-line idle). Does not pad with unrelated status.
+

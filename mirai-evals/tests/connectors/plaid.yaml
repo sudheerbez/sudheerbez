@@ -1,0 +1,91 @@
+# Efficiency prompts — Plaid (6)
+- description: Plaid / direct / EFF-031
+  vars:
+    connector: Plaid
+    efficiency_lens: direct
+    role: ops
+    connectors: Plaid
+    query: |
+      Plaid only. One number: operating account available balance now.
+  assert:
+    - type: icontains
+      value: Plaid
+    - type: llm-rubric
+      value: |
+        Answers with the requested metric in a minimal form (ideally one number or one short line). Avoids long tables, filler, or unrelated connectors.
+
+- description: Plaid / scoped / EFF-032
+  vars:
+    connector: Plaid
+    efficiency_lens: scoped
+    role: ops
+    connectors: Plaid
+    query: |
+      Plaid only. Last 5 transactions over $500. Date, amount, merchant. Nothing else.
+  assert:
+    - type: icontains
+      value: Plaid
+    - type: llm-rubric
+      value: |
+        Returns only the scoped list/fields requested (caps respected). Does not dump full histories.
+
+- description: Plaid / single_pass / EFF-033
+  vars:
+    connector: Plaid
+    efficiency_lens: single_pass
+    role: ops
+    connectors: Plaid
+    query: |
+      Plaid only. If available balance is under $25k, create an urgent Finance task due today. Else reply exactly: CLEAR.
+  assert:
+    - type: icontains
+      value: Plaid
+    - type: llm-rubric
+      value: |
+        Either produces the requested action (task/draft, unsent) with needed fields, or replies CLEAR when the condition is not met. Does not ask unnecessary follow-ups if data is available.
+
+- description: Plaid / locked / EFF-034
+  vars:
+    connector: Plaid
+    efficiency_lens: locked
+    role: ops
+    connectors: Plaid
+    query: |
+      Plaid only — do not open QuickBooks or Xero. Any pending debit over $10k? Yes/No and amount if yes.
+  assert:
+    - type: icontains
+      value: Plaid
+    - type: llm-rubric
+      value: |
+        Stays on the named connector only; does not invent pulls from other systems. Answers concisely.
+
+- description: Plaid / compressed / EFF-035
+  vars:
+    connector: Plaid
+    efficiency_lens: compressed
+    role: ops
+    connectors: Plaid
+    query: |
+      Plaid only. Net cash movement last 7 days in one signed number.
+  assert:
+    - type: icontains
+      value: Plaid
+    - type: llm-rubric
+      value: |
+        Stays within the stated length/structure budget while remaining useful.
+
+- description: Plaid / idle / EFF-036
+  vars:
+    connector: Plaid
+    efficiency_lens: idle
+    role: ops
+    connectors: Plaid
+    query: |
+      Plaid only. Is the bank feed stale (>24h since last sync)? If healthy, reply exactly: CLEAR.
+  assert:
+    - type: icontains
+      value: Plaid
+    - type: llm-rubric
+      value: |
+        If nothing material, replies CLEAR (or equivalent one-line idle). Does not pad with unrelated status.
+
