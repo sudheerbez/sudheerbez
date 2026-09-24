@@ -1,0 +1,137 @@
+# Per-connector smoke prompts — one primary ask each
+
+- description: Connector — Square
+  vars:
+    query: |
+      Square only — top 5 SKUs by revenue yesterday, and any void over $100.
+  assert:
+    - type: icontains
+      value: Square
+
+- description: Connector — Toast
+  vars:
+    query: |
+      Toast only — labor hours vs sales for last Friday dinner service.
+  assert:
+    - type: icontains
+      value: Toast
+
+- description: Connector — Clover
+  vars:
+    query: |
+      Clover only — list open tabs older than 90 minutes right now.
+  assert:
+    - type: icontains
+      value: Clover
+
+- description: Connector — Shopify
+  vars:
+    query: |
+      Shopify only — unfulfilled orders older than 48 hours with customer email.
+  assert:
+    - type: icontains
+      value: Shopify
+
+- description: Connector — Stripe
+  vars:
+    query: |
+      Stripe only — open disputes and their evidence due dates.
+  assert:
+    - type: icontains
+      value: Stripe
+
+- description: Connector — Plaid
+  vars:
+    query: |
+      Plaid only — last 10 transactions over $500 on the operating account.
+  assert:
+    - type: icontains
+      value: Plaid
+
+- description: Connector — QuickBooks
+  vars:
+    query: |
+      QuickBooks only — P&L summary for this month vs same month last year.
+  assert:
+    - type: icontains
+      value: QuickBooks
+
+- description: Connector — Xero
+  vars:
+    query: |
+      Xero only — bank reconciliation items still unmatched.
+  assert:
+    - type: icontains
+      value: Xero
+
+- description: Connector — Gmail
+  vars:
+    query: |
+      Gmail only — unread threads from vendors tagged finance in the last 3 days. Summarize; don't reply.
+  assert:
+    - type: icontains
+      value: Gmail
+
+- description: Connector — Google Sheets
+  vars:
+    query: |
+      Google Sheets only — in "Daily Close", which stores are red on labor % today?
+  assert:
+    - type: llm-rubric
+      value: References Google Sheets / Daily Close and labor %.
+
+- description: Connector — Google Drive
+  vars:
+    query: |
+      Google Drive only — find the latest "franchise playbook" PDF and confirm who has edit access.
+  assert:
+    - type: llm-rubric
+      value: Searches Drive for the playbook and discusses sharing/access.
+
+- description: Connector — WhatsApp
+  vars:
+    query: |
+      WhatsApp only — any unanswered customer chats older than 2 hours?
+  assert:
+    - type: icontains
+      value: WhatsApp
+
+- description: Connector — Discord
+  vars:
+    query: |
+      Discord only — summarize #incidents messages since yesterday 5pm.
+  assert:
+    - type: icontains
+      value: Discord
+
+- description: Connector — Slack
+  vars:
+    query: |
+      Slack only — what decisions were made in #ops-standup today?
+  assert:
+    - type: icontains
+      value: Slack
+
+- description: Connector — Dodo
+  vars:
+    query: |
+      Dodo only — failed payment reasons breakdown for the last 7 days.
+  assert:
+    - type: icontains
+      value: Dodo
+
+- description: Connector — Notion
+  vars:
+    query: |
+      Notion only — open action items from the "Weekly Ops" database assigned to me.
+  assert:
+    - type: icontains
+      value: Notion
+
+- description: Connector — Microsoft
+  vars:
+    query: |
+      Microsoft only — unread Outlook emails from landlords and any OneDrive files shared with me this week.
+  assert:
+    - type: llm-rubric
+      value: Uses Microsoft mail and/or OneDrive/files context.

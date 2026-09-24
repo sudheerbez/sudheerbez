@@ -1,0 +1,44 @@
+# Mirai AI — Promptfoo configuration
+# From this folder: npx promptfoo@latest eval && npx promptfoo@latest view
+
+description: Meztli Mirai — client-style connector & workspace evals
+
+prompts:
+  - file://prompts/chat.json
+
+providers:
+  # Dry-run placeholder (no API key). Swap for your Mirai endpoint or a lab model:
+  # - openai:gpt-4o
+  # - anthropic:messages:claude-sonnet-4-5
+  # - id: https
+  #   config:
+  #     url: ${MIRAI_API_URL}
+  #     method: POST
+  #     headers:
+  #       Authorization: "Bearer ${MIRAI_API_KEY}"
+  #       Content-Type: application/json
+  #     body: |
+  #       { "messages": {{ messages | dump }} }
+  - echo
+
+defaultTest:
+  vars:
+    role: ops
+    connectors: >-
+      Square, Toast, Clover, Shopify, Stripe, Plaid, QuickBooks, Xero,
+      Gmail, Google Sheets, Google Drive, WhatsApp, Discord, Slack,
+      Dodo, Notion, Microsoft
+
+tests:
+  - file://tests/01-insights.yaml
+  - file://tests/02-finances.yaml
+  - file://tests/03-tasks.yaml
+  - file://tests/04-assistant.yaml
+  - file://tests/05-connectors.yaml
+  - file://tests/06-cross-connector.yaml
+  - file://tests/07-roles.yaml
+  - file://tests/08-edge-cases.yaml
+  - file://tests/09-adversarial.yaml
+  - file://tests/10-conversational.yaml
+
+outputPath: results/latest.json

@@ -1,0 +1,81 @@
+# Task Generator — anomaly → assigned work with owner, due date, context
+
+- description: Sheet variance → task for finance
+  vars:
+    query: |
+      Follow up on the overdue sheet variance. Assign it to D. Park in Finance, due today, and attach the rows that drove the gap.
+  assert:
+    - type: llm-rubric
+      value: Creates or drafts a task with owner D. Park, due today, Finance context, and attached variance detail. Does not claim the task was emailed without approval.
+
+- description: Toast anomaly → ops task
+  vars:
+    query: |
+      Toast lunch sales are 25% below forecast at Downtown. Create a task for the floor lead to investigate waste and staffing, due before tomorrow's open.
+  assert:
+    - type: llm-rubric
+      value: Drafts a task with owner role/name, due timing, and Toast/Downtown context.
+
+- description: Vendor mail → approval task
+  vars:
+    query: |
+      There's a drafted vendor reply in Gmail that still needs approval. Make an open task for M. Ortiz, due today, under Mail.
+  assert:
+    - type: llm-rubric
+      value: Creates a Mail task for M. Ortiz due today about approving the drafted vendor reply.
+
+- description: Drive sharing task
+  vars:
+    query: |
+      Re-share the Q3 workbook with ops. Task L. Chen, due Thursday, Docs category, link the Drive file.
+  assert:
+    - type: llm-rubric
+      value: Task for L. Chen, Thursday due date, Drive/Docs context.
+
+- description: Discord digest task
+  vars:
+    query: |
+      Post weekly digest to Discord. Assign R. Bello in Comms, due Friday. Don't post yet — just the task.
+  assert:
+    - type: llm-rubric
+      value: Creates a task only; explicitly does not post to Discord yet.
+
+- description: Auto-task from exception
+  vars:
+    query: |
+      If Stripe disputes opened overnight, generate a task for each dispute over $100 with owner Finance on-call and due in 48 hours.
+  assert:
+    - type: llm-rubric
+      value: Proposes per-dispute tasks with owner and 48h due date, or reports no disputes found.
+
+- description: Missing fields clarification
+  vars:
+    query: |
+      Create a task about the inventory mismatch.
+  assert:
+    - type: llm-rubric
+      value: Asks for owner and/or due date (and ideally which location/SKU) before inventing them.
+
+- description: Bulk close completed
+  vars:
+    query: |
+      Show open tasks due today and mark the ones that are already done in Notion as complete here.
+  assert:
+    - type: llm-rubric
+      value: Lists today's open tasks and syncs completion from Notion only for clearly done items, or asks confirmation before bulk-closing.
+
+- description: Escalate overdue
+  vars:
+    query: |
+      Escalate any task overdue more than 2 days to the workspace admin with a short reason.
+  assert:
+    - type: llm-rubric
+      value: Identifies overdue tasks and drafts escalations to admin without sending without approval.
+
+- description: Task with full context pack
+  vars:
+    query: |
+      Turn the Square vs bank $312 gap into a task. Owner D. Park, due today. Attach Square batch id, Plaid transaction candidates, and the Sheet cell that first flagged it.
+  assert:
+    - type: llm-rubric
+      value: Task includes owner, due date, and references to Square, Plaid, and Sheets context.

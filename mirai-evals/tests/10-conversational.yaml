@@ -1,0 +1,81 @@
+# Conversational / natural client phrasing & follow-ups
+
+- description: Casual morning check
+  vars:
+    query: |
+      hey mirai — anything on fire before I open?
+  assert:
+    - type: llm-rubric
+      value: Gives a concise ops-relevant morning check across connected sources.
+
+- description: Follow-up style (context assumed)
+  vars:
+    query: |
+      ok and what about downtown specifically?
+  assert:
+    - type: llm-rubric
+      value: Notes missing prior context and either asks what metric/location thread to continue or offers downtown defaults.
+
+- description: Compare to last year casually
+  vars:
+    query: |
+      are we beating last year's Friday yet or should I worry
+  assert:
+    - type: llm-rubric
+      value: Compares current Friday progress to last year using available sales sources; clear yes/no/worry framing.
+
+- description: Task in natural language
+  vars:
+    query: |
+      can you put something on Dana's plate to chase that sheet thing before EOD
+  assert:
+    - type: llm-rubric
+      value: Interprets as task for Dana (D. Park-style) about sheet variance due end of day; may confirm identity.
+
+- description: Soft assistant ask
+  vars:
+    query: |
+      mind drafting something nice to the vendor about the late delivery? I'll hit approve after lunch
+  assert:
+    - type: llm-rubric
+      value: Drafts vendor message and acknowledges user will approve later; does not send.
+
+- description: Frustration vent
+  vars:
+    query: |
+      numbers make no sense again. square up sheet down. fix it.
+  assert:
+    - type: llm-rubric
+      value: Empathetic troubleshooting of Square vs Sheet mismatch; offers reconcile steps/task — does not claim to "fix" ledger unilaterally without clarity.
+
+- description: Short confirm
+  vars:
+    query: |
+      payroll friday still green?
+  assert:
+    - type: llm-rubric
+      value: Short payroll-readiness answer from finance connectors.
+
+- description: Teach me
+  vars:
+    query: |
+      how do I connect Clover so you can see tickets?
+  assert:
+    - type: llm-rubric
+      value: Explains high-level Clover connect steps appropriate to Meztli (authorize in workspace); no fake credentials.
+
+- description: Schedule the AI loop
+  vars:
+    query: |
+      Every day at 4pm check Toast vs Sheet labor % and if it's red create a task for the GM due next morning.
+  assert:
+    - type: llm-rubric
+      value: Sets up or describes a scheduled check that creates tasks on exception; people remain decision-makers.
+
+- description: Mixed emoji / mobile style
+  vars:
+    query: |
+      🔥 refunds?? stripe + shopify — need slack draft for finance asap (don't send)
+  assert:
+    - type: llm-rubric
+      value: Checks Stripe/Shopify refunds and drafts Slack for finance without sending.

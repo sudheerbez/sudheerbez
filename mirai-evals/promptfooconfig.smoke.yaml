@@ -1,0 +1,18 @@
+# Smoke config — no LLM grader needed. Validates prompts load and provider responds.
+# npx promptfoo@latest eval -c promptfooconfig.smoke.yaml
+
+description: Meztli Mirai — smoke load of all client prompts
+
+prompts:
+  - "{{prompt}}"
+
+providers:
+  - echo
+
+tests:
+  - file://datasets/prompts-catalog.csv
+
+defaultTest:
+  assert:
+    - type: javascript
+      value: output.length > 0
