@@ -8,6 +8,10 @@ on:
     branches:
       - main
 
+# Least privilege by default; only the job below gets write access.
+permissions:
+  contents: read
+
 jobs:
   generate:
     permissions:
@@ -17,7 +21,7 @@ jobs:
 
     steps:
       - name: generate pacman-contribution-graph.svg
-        uses: abozanona/pacman-contribution-graph@main
+        uses: abozanona/pacman-contribution-graph@70945878b1118303b37b88060fc7145e1a57d7b1 # main as of 2026-11-24, pinned
         with:
           github_user_name: ${{ github.repository_owner }}
         env:
@@ -25,7 +29,7 @@ jobs:
 
       # Push the generated SVG to the output branch
       - name: push pacman-contribution-graph.svg to the output branch
-        uses: crazy-max/ghaction-github-pages@v3.1.0
+        uses: crazy-max/ghaction-github-pages@c0d7ff0487ee0415efb7f32dab10ea880330b1dd # v3.1.0
         with:
           target_branch: output
           build_dir: dist

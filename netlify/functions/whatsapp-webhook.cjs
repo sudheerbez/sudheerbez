@@ -2,9 +2,28 @@
  * Meta WhatsApp Cloud API webhook (Netlify Function).
  * Callback path: /api/whatsapp/webhook
  *
- * Env: WHATSAPP_VERIFY_TOKEN, WHATSAPP_APP_SECRET (optional signature check)
+ * Env (both REQUIRED):
+ *   WHATSAPP_VERIFY_TOKEN  – the string you type into Meta's webhook setup
+ *   WHATSAPP_APP_SECRET    – Meta App Secret; every POST must carry a valid
+ *                            X-Hub-Signature-256 or it is rejected.
+ *
+ * Security notes:
+ *  - Fails closed: if the app secret is missing, POSTs are refused (no unsigned events).
+ *  - Logs mask phone numbers and never store message text.
  */
 const crypto = require("crypto");
+
+const MAX_BODY_BYTES = 1024 * 1024; // 1 MB — Meta payloads are far smaller
+
+const TEXT_HEADERS = {
+  "Content-Type": "text/plain; charset=utf-8",
+  "X-Content-Type-Options": "nosniff",
+  "Cache-Control": "no-store",
+};
+
+function text(statusCode, body) {
+  return { statusCode, headers: TEXT_HEADERS, body };
+}
 
 function timingSafeEqual(a, b) {
   const bufA = Buffer.from(String(a));
@@ -14,13 +33,18 @@ function timingSafeEqual(a, b) {
 }
 
 function verifyMetaSignature(rawBody, signatureHeader, appSecret) {
-  if (!appSecret) return true;
+  if (!appSecret) return false;
   if (!signatureHeader || !signatureHeader.startsWith("sha256=")) return false;
   const expected = crypto
     .createHmac("sha256", appSecret)
-    .update(rawBody, "utf8")
+    .update(rawBody)
     .digest("hex");
   return timingSafeEqual(signatureHeader.slice("sha256=".length), expected);
+}
+
+function maskPhone(value) {
+  const s = String(value ?? "");
+  return s.length > 4 ? `***${s.slice(-4)}` : "***";
 }
 
 function handleVerification(query) {
@@ -30,38 +54,31 @@ function handleVerification(query) {
   const verifyToken = process.env.WHATSAPP_VERIFY_TOKEN;
 
   if (!verifyToken) {
-    return {
-      statusCode: 500,
-      body: "WHATSAPP_VERIFY_TOKEN is not configured",
-    };
+    return text(500, "WHATSAPP_VERIFY_TOKEN is not configured");
   }
 
   if (mode === "subscribe" && token && timingSafeEqual(token, verifyToken)) {
-    return {
-      statusCode: 200,
-      headers: { "Content-Type": "text/plain" },
-      body: challenge ?? "",
-    };
+    return text(200, String(challenge ?? "").slice(0, 200));
   }
 
-  return { statusCode: 403, body: "Forbidden" };
+  return text(403, "Forbidden");
 }
 
 function extractInboundMessages(payload) {
   const messages = [];
   for (const entry of payload?.entry ?? []) {
-    for (const change of entry.changes ?? []) {
-      const value = change.value;
-      if (!value?.messages) continue;
+    for (const change of entry?.changes ?? []) {
+      const value = change?.value;
+      if (!Array.isArray(value?.messages)) continue;
       for (const msg of value.messages) {
         messages.push({
           wabaId: entry.id,
           phoneNumberId: value.metadata?.phone_number_id,
-          from: msg.from,
-          id: msg.id,
-          timestamp: msg.timestamp,
-          type: msg.type,
-          text: msg.text?.body ?? null,
+          from: maskPhone(msg?.from),
+          id: msg?.id,
+          timestamp: msg?.timestamp,
+          type: msg?.type,
+          textLength: typeof msg?.text?.body === "string" ? msg.text.body.length : 0,
         });
       }
     }
@@ -77,29 +94,32 @@ exports.handler = async (event) => {
   }
 
   if (method === "POST") {
+    const appSecret = process.env.WHATSAPP_APP_SECRET;
+    if (!appSecret) {
+      console.error("whatsapp_webhook_misconfigured: WHATSAPP_APP_SECRET is not set");
+      return text(500, "WHATSAPP_APP_SECRET is not configured");
+    }
+
     const rawBody = event.isBase64Encoded
-      ? Buffer.from(event.body || "", "base64").toString("utf8")
-      : event.body || "";
+      ? Buffer.from(event.body || "", "base64")
+      : Buffer.from(event.body || "", "utf8");
 
-    const signature =
-      event.headers?.["x-hub-signature-256"] ||
-      event.headers?.["X-Hub-Signature-256"];
+    if (rawBody.length > MAX_BODY_BYTES) {
+      return text(413, "Payload Too Large");
+    }
 
-    if (
-      !verifyMetaSignature(
-        rawBody,
-        signature,
-        process.env.WHATSAPP_APP_SECRET
-      )
-    ) {
-      return { statusCode: 401, body: "Invalid signature" };
+    const headers = event.headers || {};
+    const signature = headers["x-hub-signature-256"] || headers["X-Hub-Signature-256"];
+
+    if (!verifyMetaSignature(rawBody, signature, appSecret)) {
+      return text(401, "Invalid signature");
     }
 
     let payload;
     try {
-      payload = JSON.parse(rawBody || "{}");
+      payload = JSON.parse(rawBody.toString("utf8") || "{}");
     } catch {
-      return { statusCode: 400, body: "Invalid JSON" };
+      return text(400, "Invalid JSON");
     }
 
     const inbound = extractInboundMessages(payload);
@@ -109,10 +129,10 @@ exports.handler = async (event) => {
 
     return {
       statusCode: 200,
-      headers: { "Content-Type": "application/json" },
+      headers: { ...TEXT_HEADERS, "Content-Type": "application/json" },
       body: JSON.stringify({ ok: true, received: inbound.length }),
     };
   }
 
-  return { statusCode: 405, body: "Method Not Allowed" };
+  return text(405, "Method Not Allowed");
 };

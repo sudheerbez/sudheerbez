@@ -7,6 +7,9 @@
   # Avoid false positives when optional forward URL resembles site paths in comments
   SECRETS_SCAN_OMIT_KEYS = "META_OAUTH_SUCCESS_URL"
 
+# Security headers (CSP, anti-framing, nosniff, etc.) are generated at build
+# time into dist/_headers from vite.config.ts — edit them there, not here.
+
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"

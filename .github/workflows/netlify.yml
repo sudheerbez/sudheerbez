@@ -10,6 +10,11 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# Least privilege: this job only reads code and records a GitHub deployment.
+permissions:
+  contents: read
+  deployments: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -25,7 +30,7 @@ jobs:
       - run: npm run build
 
       - name: Deploy to Netlify
-        uses: nwtgck/actions-netlify@v3.0
+        uses: nwtgck/actions-netlify@4cbaf4c08f1a7bfa537d6113472ef4424e4eb654 # v3.0
         with:
           publish-dir: ./dist
           functions-dir: ./netlify/functions
