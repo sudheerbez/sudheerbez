@@ -50,7 +50,7 @@ export function Work() {
           <h2>The tape</h2>
         </div>
         <p className="label work-cue">
-          Drag the reel <em>→</em>
+          Scroll the reel <em>→</em>
         </p>
       </div>
 

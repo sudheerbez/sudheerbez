@@ -361,6 +361,9 @@ main {
   grid-template-rows: 1fr auto auto;
   padding: calc(var(--nav-h) + 1rem) var(--pad) 1.6rem;
   position: relative;
+  /* The glow (::before) sits at right: -8%; clip it so phones don't get a
+     horizontally wider page (was 421px wide on a 390px screen). */
+  overflow-x: clip;
 }
 
 .hero::before {
